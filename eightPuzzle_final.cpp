@@ -45,7 +45,7 @@ struct CompareHeuristic {
 
 Node* GeneralSearch(Node* initialstate);
 bool GoalTest(vector<vector<int>> curr_state);
-priority_queue<Node*,vector<Node*>,CompareHeuristic> QueueingFunction(Node* node, priority_queue<Node*,vector<Node*>,CompareHeuristic> nodes, set<vector<vector<int>>> visited);
+void QueueingFunction(Node*& node, priority_queue<Node*,vector<Node*>,CompareHeuristic>& nodes, set<vector<vector<int>>>& visited);
 vector<Node*> Expand(Node* node);
 Node* makeNode(Node* node, int blank_x, int blank_y);
 void pickHeuristic(Node*& node);
@@ -136,7 +136,7 @@ Node* GeneralSearch(Node* initialstate) {
 		nodes.pop();
 		visited.insert(node->state);
 		if (GoalTest(node->state)) return node;
-		nodes = QueueingFunction(node,nodes,visited);
+		QueueingFunction(node,nodes,visited);
 		if (nodes.size() > MAX_SIZE_QUEUE) MAX_SIZE_QUEUE = nodes.size();
 	}
 
@@ -164,7 +164,7 @@ bool GoalTest(vector<vector<int>> curr_state) {
 	return true;
 }
 
-priority_queue<Node*,vector<Node*>,CompareHeuristic> QueueingFunction(Node* node, priority_queue<Node*,vector<Node*>,CompareHeuristic> nodes, set<vector<vector<int>>> visited) {
+void QueueingFunction(Node*& node, priority_queue<Node*,vector<Node*>,CompareHeuristic>& nodes, set<vector<vector<int>>>& visited) {
 	//expand the current node
 	vector<Node*> children = Expand(node);
 
@@ -174,7 +174,6 @@ priority_queue<Node*,vector<Node*>,CompareHeuristic> QueueingFunction(Node* node
 			nodes.push(children[i]);
 		} 
 	}
-	return nodes;
 }
 
 vector<Node*> Expand(Node* node) {
